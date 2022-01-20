@@ -1,0 +1,78 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  plugins:
+    - dart_code_metrics
+  errors:
+    todo: ignore
+  exclude:
+    - '**/*.config.dart'
+    - '**/*.freezed.dart'
+    - '**/*.gr.dart'
+    - '**/*.g.dart'
+    - '**/*.i69n.dart'
+
+linter:
+  rules:
+    - prefer_single_quotes
+    - avoid_field_initializers_in_const_classes
+    - avoid_renaming_method_parameters
+    - avoid_types_on_closure_parameters
+    - avoid_unnecessary_containers
+    - camel_case_types
+    - omit_local_variable_types
+    - prefer_const_literals_to_create_immutables
+    - prefer_constructors_over_static_methods
+    - prefer_expression_function_bodies
+    - sort_constructors_first
+    - unnecessary_new
+    - use_key_in_widget_constructors
+    - lines_longer_than_80_chars
+
+dart_code_metrics:
+  metrics:
+    cyclomatic-complexity: 20
+    umber-of-parameters: 5
+    maximum-nesting-level: 5
+  metrics-exclude:
+    - test/**
+  rules:
+    # Common
+    - avoid-global-state
+    - newline-before-return
+    - no-boolean-literal-compare
+    - no-empty-block
+    - prefer-trailing-comma
+    - prefer-conditional-expressions
+    - no-equal-then-else
+    - avoid-missing-enum-constant-in-map
+    - avoid-nested-conditional-expressions:
+        acceptable-level: 2
+    - avoid-unused-parameters
+    - member-ordering-extended:
+        # TODO: order
+        order:
+          - constructors
+          - public-fields
+          - private-fields
+    - no-equal-arguments:
+        ignored-parameters:
+          - height
+          - width
+    - no-magic-number
+    - no-object-declaration
+    - prefer-first
+    - prefer-last
+    - prefer-match-file-name:
+        exclude:
+          - lib/main.dart
+    # Flutter
+    - always-remove-listener
+    - avoid-unnecessary-setstate
+    - avoid-wrapping-in-padding
+    - prefer-extracting-callbacks
+    - prefer-single-widget-per-file:
+        ignore-private-widgets: true
+  anti-patterns:
+    - long-method
+    - long-parameter-list

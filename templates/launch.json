@@ -1,0 +1,16 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "int20h_app",
+			"request": "launch",
+			"type": "dart"
+		},
+		{
+			"name": "int20h_app (profile mode)",
+			"request": "launch",
+			"type": "dart",
+			"flutterMode": "profile"
+		}
+	]
+}
