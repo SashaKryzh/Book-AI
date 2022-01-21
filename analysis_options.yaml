@@ -15,16 +15,16 @@ analyzer:
 linter:
   rules:
     prefer_const_constructors: false
-    - prefer_single_quotes
-    - camel_case_types
-    - omit_local_variable_types
-    - unnecessary_new
+    prefer_const_literals_to_create_immutables: false
+    prefer_single_quotes: true
+    camel_case_types: true
+    omit_local_variable_types: true
+    unnecessary_new: true
 
 dart_code_metrics:
   metrics-exclude:
     - test/**
   rules:
-    - prefer_const_constructors: false
     # Common
     - newline-before-return
     - prefer-first
