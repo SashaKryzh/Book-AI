@@ -11,22 +11,21 @@ void main() async {
   configureDependencies();
 
   BlocOverrides.runZoned(
-    () => runApp(const XetaxApp()),
+    () => runApp(const Int20hApp()),
     blocObserver: SimpleBlocObserver(),
   );
 }
 
-class XetaxApp extends StatelessWidget {
-  const XetaxApp({Key? key}) : super(key: key);
+class Int20hApp extends StatelessWidget {
+  const Int20hApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => ScreenUtilInit(
-        designSize: const Size(416, 896),
         minTextAdapt: true,
         builder: () => MaterialApp.router(
           routerDelegate: getIt<AppRouter>().delegate(),
           routeInformationParser: getIt<AppRouter>().defaultRouteParser(),
-          title: 'Xetax app',
+          title: 'Int20h App',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             primarySwatch: Colors.blue,

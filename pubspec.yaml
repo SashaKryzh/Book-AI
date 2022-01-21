@@ -2,7 +2,7 @@ name: int20h_app
 description: A new Flutter project.
 
 # Prevent accidental publishing to pub.dev.
-publish_to: 'none'
+publish_to: "none"
 
 version: 1.0.0+1
 
@@ -12,7 +12,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  
+
   auto_route: ^3.2.1
   flutter_bloc: ^8.0.1
   get_it: ^7.2.0
@@ -24,6 +24,9 @@ dependencies:
   freezed_annotation: ^1.1.0
   logger: ^1.1.0
   pretty_dio_logger: ^1.1.1
+  flutter_slider_drawer: ^2.0.0
+  flutter_chat_ui: ^1.5.4
+  dialog_flowtter: ^0.3.3
 
 dev_dependencies:
   flutter_test:
