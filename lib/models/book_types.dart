@@ -1,8 +1,10 @@
 enum BookType {
+  undefined,
   procrastination,
-  burnout,
+  anxiety,
   communicationProblems,
   workLifeBalance,
   selfCare,
-  undefined
+  burnout,
+  eatingDisorder,
 }

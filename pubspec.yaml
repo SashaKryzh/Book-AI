@@ -30,9 +30,11 @@ dependencies:
   dialog_flowtter: ^0.3.3
   equatable: ^2.0.3
   cached_network_image: ^3.2.0
+  progress_indicators: ^1.0.0
+  url_launcher: ^6.0.18
 
 dev_dependencies:
-#  test: ^1.19.1
+
   flutter_test:
     sdk: flutter
 

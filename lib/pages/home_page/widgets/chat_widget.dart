@@ -9,15 +9,25 @@ class ChatWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatCubit, ChatState>(
-      builder: (context, state) {
-        return Chat(
-          user: myUser,
-          messages: state.messages,
-          onSendPressed: (message) =>
-              context.read<ChatCubit>().sendMessage(message.text),
-        );
-      },
+    return ClipRRect(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(30),
+        topRight: Radius.circular(30),
+      ),
+      child: BlocBuilder<ChatCubit, ChatState>(
+        builder: (context, state) {
+          return Chat(
+            user: myUser,
+            messages: state.messages,
+            onSendPressed: (message) =>
+                context.read<ChatCubit>().sendMessage(message.text),
+            scrollPhysics: AlwaysScrollableScrollPhysics(),
+            theme: DefaultChatTheme(
+              primaryColor: Color(0xFFE46DCA),
+            ),
+          );
+        },
+      ),
     );
   }
 }

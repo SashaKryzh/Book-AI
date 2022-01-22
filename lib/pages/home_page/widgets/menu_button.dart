@@ -43,15 +43,15 @@ class _MenuButtonState extends State<MenuButton> with TickerProviderStateMixin {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
+              color: Colors.white.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 5,
             ),
           ],
         ),
         child: Center(
           child: AnimatedIcon(
-            icon: AnimatedIcons.close_menu,
+            icon: AnimatedIcons.arrow_menu,
             progress: animationController,
           ),
         ),
