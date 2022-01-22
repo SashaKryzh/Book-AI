@@ -21,6 +21,10 @@ class ChatWidget extends StatelessWidget {
             messages: state.messages,
             onSendPressed: (message) =>
                 context.read<ChatCubit>().sendMessage(message.text),
+            scrollPhysics: AlwaysScrollableScrollPhysics(),
+            theme: DefaultChatTheme(
+              primaryColor: Color(0xFFE46DCA),
+            ),
           );
         },
       ),

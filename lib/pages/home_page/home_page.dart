@@ -44,7 +44,10 @@ class _HomePageState extends State<HomePage> {
                     toggleDrawer: toggle,
                     isOpen: isOpen,
                   ),
-                  sliderMain: _SliderMain(toggleDrawer: toggle),
+                  sliderMain: _SliderMain(
+                    toggleDrawer: toggle,
+                    isOpen: isOpen,
+                  ),
                   appBarColor: Colors.transparent,
                   hasAppBar: false,
                   isDraggable: false,
@@ -63,6 +66,7 @@ class _HomePageState extends State<HomePage> {
 
   void toggle() {
     key.currentState!.toggle();
+    FocusScope.of(context).unfocus();
     setState(() {
       isOpen = !isOpen;
     });
@@ -70,23 +74,31 @@ class _HomePageState extends State<HomePage> {
 }
 
 class _SliderMain extends StatelessWidget {
-  const _SliderMain({Key? key, required this.toggleDrawer}) : super(key: key);
+  const _SliderMain({
+    Key? key,
+    required this.toggleDrawer,
+    required this.isOpen,
+  }) : super(key: key);
 
   final VoidCallback toggleDrawer;
+  final bool isOpen;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Flexible(
-          flex: 1,
-          child: HeaderWidget(),
-        ),
-        Expanded(
-          flex: 3,
-          child: ChatWidget(),
-        ),
-      ],
+    return AbsorbPointer(
+      absorbing: isOpen,
+      child: Column(
+        children: [
+          Flexible(
+            flex: 1,
+            child: HeaderWidget(),
+          ),
+          Expanded(
+            flex: 3,
+            child: ChatWidget(),
+          ),
+        ],
+      ),
     );
   }
 }
