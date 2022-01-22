@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
+import 'package:int20h_app/core/injection/injection.dart';
+import 'package:int20h_app/pages/home_page/cubit/chat_cubit.dart';
 import 'package:int20h_app/pages/home_page/widgets/chat_widget.dart';
 import 'package:int20h_app/pages/home_page/widgets/header_widget.dart';
 import 'package:int20h_app/pages/home_page/widgets/menu_button.dart';
@@ -15,22 +18,25 @@ class _HomePageState extends State<HomePage> {
   final key = GlobalKey<SliderMenuContainerState>();
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: Stack(
-          children: [
-            SliderMenuContainer(
-              key: key,
-              sliderMenu: _SliderMenu(toggleDrawer: toggle),
-              sliderMain: _SliderMain(toggleDrawer: toggle),
-              hasAppBar: false,
-            ),
-            SafeArea(
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: MenuButton(onTap: toggle),
+  Widget build(BuildContext context) => BlocProvider(
+        create: (_) => getIt<ChatCubit>()..loadMessages(),
+        child: Scaffold(
+          body: Stack(
+            children: [
+              SliderMenuContainer(
+                key: key,
+                sliderMenu: _SliderMenu(toggleDrawer: toggle),
+                sliderMain: _SliderMain(toggleDrawer: toggle),
+                hasAppBar: false,
               ),
-            ),
-          ],
+              SafeArea(
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: MenuButton(onTap: toggle),
+                ),
+              ),
+            ],
+          ),
         ),
       );
 

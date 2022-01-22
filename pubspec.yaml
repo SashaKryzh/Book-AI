@@ -22,11 +22,14 @@ dependencies:
   dio: ^4.0.4
   retrofit: ^3.0.1
   freezed_annotation: ^1.1.0
+  json_annotation: ^4.4.0
   logger: ^1.1.0
   pretty_dio_logger: ^1.1.1
   flutter_slider_drawer: ^2.0.0
   flutter_chat_ui: ^1.5.4
   dialog_flowtter: ^0.3.3
+  equatable: ^2.0.3
+  cached_network_image: ^3.2.0
 
 dev_dependencies:
   flutter_test:

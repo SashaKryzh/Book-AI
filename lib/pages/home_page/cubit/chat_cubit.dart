@@ -13,9 +13,7 @@ part 'chat_cubit.freezed.dart';
 @injectable
 class ChatCubit extends Cubit<ChatState> {
   ChatCubit(this._dialogueService) : super(ChatState()) {
-    _messagesSubscription = _dialogueService.messagesStream.listen((event) {
-      print(event);
-    });
+    _messagesSubscription = _dialogueService.messagesStream.listen(_addMessage);
   }
 
   final DialogueService _dialogueService;
@@ -49,5 +47,9 @@ class ChatCubit extends Cubit<ChatState> {
         ...state.messages,
       ],
     ));
+  }
+
+  void _addMessage(Message message) {
+    emit(state.copyWith(messages: [message, ...state.messages]));
   }
 }
