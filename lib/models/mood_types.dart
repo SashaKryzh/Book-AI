@@ -1,5 +1,6 @@
 enum MoodType {
-  Good,
-  Normal,
-  Bad
+  good,
+  normal,
+  bad,
+  undefined
 }

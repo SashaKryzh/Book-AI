@@ -1,5 +1,6 @@
 import 'package:dialog_flowtter/dialog_flowtter.dart';
 import 'package:injectable/injectable.dart';
+import 'package:int20h_app/models/chat_response.dart';
 
 @lazySingleton
 class DialogFlowService {
@@ -11,18 +12,34 @@ class DialogFlowService {
     return _dialogFlow!;
   }
 
-  Future<String> sendIntent(String message) async {
+  Future<ChatResponse> sendIntent(String userMessage) async {
     final response = await (await _dialogFlowInstance).detectIntent(
       queryInput: QueryInput(
-        text: TextInput(text: message, languageCode: 'ru'),
+        text: TextInput(text: userMessage, languageCode: 'ru'),
       ),
     );
 
-    if (response.message == null) return 'Error connecting to di  alogflow';
+    var textResponse = response.text ?? 'Error';
+    if (response.message == null) {
+      return ChatResponse(
+        message: textResponse,
+        parameters: Map.identity(),
+        isError: true,
+      );
+    }
 
-    print('Here is our intent: ' + message);
-    print(response.toString());
+    var parameters = response.queryResult?.parameters ?? Map.identity();
+    var sentiment = response.queryResult?.sentimentAnalysisResult
+            ?.queryTextSentiment?.magnitude ??
+        0.5;
+    var isEnd =
+        response.queryResult?.diagnosticInfo?['end_conversation'] ?? false;
 
-    return response.message.toString();
+    return ChatResponse(
+      message: textResponse,
+      parameters: parameters,
+      sentiment: sentiment,
+      isFinal: isEnd,
+    );
   }
 }

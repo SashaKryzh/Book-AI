@@ -32,6 +32,7 @@ dependencies:
   cached_network_image: ^3.2.0
 
 dev_dependencies:
+#  test: ^1.19.1
   flutter_test:
     sdk: flutter
 
@@ -50,4 +51,4 @@ flutter:
 
   assets:
     - assets/images/
-    - assets/
+    - assets/dialog_flow_auth.json

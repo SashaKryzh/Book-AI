@@ -2,6 +2,10 @@ import 'dart:async';
 
 import 'package:injectable/injectable.dart';
 import 'package:int20h_app/constants.dart';
+import 'package:int20h_app/models/book_types.dart';
+import 'package:int20h_app/models/chat_response.dart';
+import 'package:int20h_app/models/dialogue_summary.dart';
+import 'package:int20h_app/models/mood_types.dart';
 import 'package:int20h_app/services/dialogflow_service.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 
@@ -9,6 +13,7 @@ import 'package:flutter_chat_types/flutter_chat_types.dart';
 class DialogueService {
   DialogueService(this._dialogFlowService);
 
+  final DialogueSummary _summary = DialogueSummary();
   final List<Message> _messagesList = [];
   final _messagesStream = StreamController<Message>.broadcast();
 
@@ -18,12 +23,53 @@ class DialogueService {
 
   void sendMessage(String text) async {
     _addUserMessage(text);
-    // await _dialogFlowService.;
-    _addAIMessage("Answer");
+
+    if (_isEnoughDataAboutUser()) {
+      _addFinalAIMessage();
+    } else {
+      ChatResponse answer = await _dialogFlowService.sendIntent(text);
+      _processAnswer(answer);
+      _addAIMessage(answer.message);
+    }
   }
 
   Future<List<Message>> getMessages() async {
     return _messagesList;
+  }
+
+  void _processAnswer(ChatResponse answer) {
+    if (answer.parameters.isNotEmpty) {
+      var moodparam = 'MoodType.' + (answer.parameters['mood'] ?? '');
+      _summary.moodType = MoodType.values.firstWhere(
+        (e) => e.toString() == moodparam,
+        orElse: () => _summary.moodType,
+      );
+
+      var bookparam = 'BookType.' + (answer.parameters['book'] ?? '');
+      _summary.bookType = BookType.values.firstWhere(
+        (e) => e.toString() == bookparam,
+        orElse: () => _summary.bookType,
+      );
+
+      _addAIMessage("Your params ( " +
+          _summary.moodType.toString() +
+          ', ' +
+          _summary.bookType.toString() +
+          ')');
+    }
+
+    if (answer.isFinal) {
+      _summary.isFinalReached = true;
+    }
+    // _addAIMessage("Your sentiment is " + answer.sentiment.toString());
+
+    // todo get all the data about parameters, mood, sentiment...
+  }
+
+  bool _isEnoughDataAboutUser() {
+    return _summary.isFinalReached &&
+        _summary.moodType != MoodType.undefined &&
+        _summary.bookType != BookType.undefined;
   }
 
   void _addUserMessage(String message) {
@@ -32,6 +78,10 @@ class DialogueService {
 
   void _addAIMessage(String message) {
     _addMessage(message, aiUser);
+  }
+
+  void _addFinalAIMessage() {
+    _addMessage("Я собрал достаточно параметров", aiUser);
   }
 
   void _addMessage(String message, User user) {
