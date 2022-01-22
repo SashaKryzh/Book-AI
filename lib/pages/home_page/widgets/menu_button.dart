@@ -20,6 +20,7 @@ class _MenuButtonState extends State<MenuButton> with TickerProviderStateMixin {
   void initState() {
     animationController = AnimationController(
       vsync: this,
+      value: 1,
       duration: Duration(milliseconds: 200),
     );
     super.initState();
@@ -30,11 +31,7 @@ class _MenuButtonState extends State<MenuButton> with TickerProviderStateMixin {
     return GestureDetector(
       onTap: () {
         widget.onTap?.call();
-        if (isOpen) {
-          animationController.reverse();
-        } else {
-          animationController.forward();
-        }
+        isOpen ? animationController.forward() : animationController.reverse();
         isOpen = !isOpen;
       },
       child: Container(

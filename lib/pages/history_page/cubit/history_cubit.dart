@@ -11,5 +11,13 @@ part 'history_cubit.freezed.dart';
 class HistoryCubit extends Cubit<HistoryState> {
   HistoryCubit(this._booksService) : super(HistoryState.initial());
 
-  BooksService _booksService;
+  final BooksService _booksService;
+
+  void load() async {
+    emit(HistoryState.loading());
+    final themeBooks = await _booksService.getThemes();
+    Future.delayed(Duration(seconds: 1), () async {
+      emit(HistoryState.loaded(themeBooks: [...themeBooks]));
+    });
+  }
 }

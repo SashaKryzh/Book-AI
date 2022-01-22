@@ -35,6 +35,10 @@ class BooksService {
   }
 
   Future<List<ThemeBooks>> getThemes() async {
-    return [];
+    return [
+      await getBooksOnTheme(1),
+      await getBooksOnTheme(1),
+      await getBooksOnTheme(1),
+    ];
   }
 }
