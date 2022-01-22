@@ -12,7 +12,7 @@ part 'chat_cubit.freezed.dart';
 class ChatCubit extends Cubit<ChatState> {
   ChatCubit(this._dialogFlowService) : super(ChatState());
 
-  DialogFlowService _dialogFlowService;
+  final DialogFlowService _dialogFlowService;
 
   void loadMessages() {
     final messages = [
@@ -25,9 +25,12 @@ class ChatCubit extends Cubit<ChatState> {
     emit(state.copyWith(messages: messages));
   }
 
-  void sendMessage(String message) {
+  Future<void> sendMessage(String message) async {
+    final text = await _dialogFlowService.sendIntent(message);
+
     emit(state.copyWith(
       messages: [
+        TextMessage(author: myUser, id: '3', text: text),
         TextMessage(author: myUser, id: '2', text: message),
         ...state.messages,
       ],
