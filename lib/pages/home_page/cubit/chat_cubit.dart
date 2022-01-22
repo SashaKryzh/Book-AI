@@ -5,20 +5,20 @@ import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:int20h_app/constants.dart';
-import 'package:int20h_app/services/dialog_service_sasha.dart';
+import 'package:int20h_app/services/dialogue_service.dart';
 
 part 'chat_state.dart';
 part 'chat_cubit.freezed.dart';
 
 @injectable
 class ChatCubit extends Cubit<ChatState> {
-  ChatCubit(this._dialogService) : super(ChatState()) {
-    _messagesSubscription = _dialogService.messagesStream.listen((event) {
+  ChatCubit(this._dialogueService) : super(ChatState()) {
+    _messagesSubscription = _dialogueService.messagesStream.listen((event) {
       print(event);
     });
   }
 
-  final DialogService _dialogService;
+  final DialogueService _dialogueService;
 
   @override
   Future<void> close() {
@@ -41,7 +41,7 @@ class ChatCubit extends Cubit<ChatState> {
   }
 
   Future<void> sendMessage(String message) async {
-    _dialogService.sendMessage(message);
+    _dialogueService.sendMessage(message);
 
     emit(state.copyWith(
       messages: [
