@@ -1,21 +1,18 @@
 import 'package:dialog_flowtter/dialog_flowtter.dart';
 import 'package:injectable/injectable.dart';
 
-@singleton
+@lazySingleton
 class DialogFlowService {
-  final DialogFlowtter _dialogFlow;
+  DialogFlowtter? _dialogFlow;
 
-  DialogFlowService._(DialogFlowtter service) : _dialogFlow = service;
+  Future<DialogFlowtter> get _dialogFlowInstance async {
+    _dialogFlow ??= await DialogFlowtter.fromFile();
 
-  @factoryMethod
-  static Future<DialogFlowService> create() async {
-    final service = await DialogFlowtter.fromFile();
-
-    return DialogFlowService._(service);
+    return _dialogFlow!;
   }
 
   Future<String> sendIntent(String message) async {
-    var response = await _dialogFlow.detectIntent(
+    final response = await (await _dialogFlowInstance).detectIntent(
       queryInput: QueryInput(
         text: TextInput(text: message, languageCode: 'ru'),
       ),

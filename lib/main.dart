@@ -8,7 +8,8 @@ import 'package:int20h_app/utils/simple_bloc_observer.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await configureDependencies();
+  configureDependencies();
+  
   BlocOverrides.runZoned(
     () => runApp(const Int20hApp()),
     blocObserver: SimpleBlocObserver(),
