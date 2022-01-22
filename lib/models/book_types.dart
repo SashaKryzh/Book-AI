@@ -1,6 +1,4 @@
 enum BookType {
-  fun,
-  nofun,
   procrastination,
   burnout,
   communicationProblems,

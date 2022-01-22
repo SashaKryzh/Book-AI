@@ -13,6 +13,20 @@ import 'package:flutter_chat_types/flutter_chat_types.dart';
 class DialogueService {
   DialogueService(this._dialogFlowService);
 
+  Map<BookType, double> _userWeights = Map.fromEntries([
+    MapEntry(BookType.burnout, 0),
+    MapEntry(BookType.procrastination, 0),
+    MapEntry(BookType.workLifeBalance, 0),
+  ]);
+
+  List<MapEntry<String, BookType>> _userQuestions = List.from([
+    MapEntry("Do you feel like burnout?", BookType.burnout),
+    MapEntry("Do you feel like procrastination?", BookType.procrastination),
+    MapEntry("Do you feel like workLifeBalance?", BookType.workLifeBalance),
+  ]);
+
+  var questionNumber = 0;
+
   final DialogueSummary _summary = DialogueSummary();
   final List<Message> _messagesList = [];
   final _messagesStream = StreamController<Message>.broadcast();
@@ -24,11 +38,20 @@ class DialogueService {
   void sendMessage(String text) async {
     _addUserMessage(text);
 
-    if (_isEnoughDataAboutUser()) {
+    if (questionNumber == _userQuestions.length || _summary.isFinalReached) {
+      // find result
       _addFinalAIMessage();
+      return;
+    }
+
+    ChatResponse answer = await _dialogFlowService.sendIntent(text, true);
+    if (answer.isError) {
+      _addAIMessage(answer.message);
+      // ask question again
+      _addAIMessage(_userQuestions[questionNumber].key);
     } else {
-      ChatResponse answer = await _dialogFlowService.sendIntent(text);
-      _processAnswer(answer);
+      _processAnswer(answer); // update weights here
+      questionNumber++;
       _addAIMessage(answer.message);
     }
   }
@@ -39,23 +62,12 @@ class DialogueService {
 
   void _processAnswer(ChatResponse answer) {
     if (answer.parameters.isNotEmpty) {
-      var moodparam = 'MoodType.' + (answer.parameters['mood'] ?? '');
-      _summary.moodType = MoodType.values.firstWhere(
-        (e) => e.toString() == moodparam,
-        orElse: () => _summary.moodType,
-      );
+      var agreeParam = answer.parameters['agree'] ?? false;
 
-      var bookparam = 'BookType.' + (answer.parameters['book'] ?? '');
-      _summary.bookType = BookType.values.firstWhere(
-        (e) => e.toString() == bookparam,
-        orElse: () => _summary.bookType,
-      );
-
-      _addAIMessage("Your params ( " +
-          _summary.moodType.toString() +
-          ', ' +
-          _summary.bookType.toString() +
-          ')');
+      if (agreeParam) {
+        var type = _userQuestions[questionNumber].value;
+        _userWeights[type] = (_userWeights[type] ?? 0) + 1;
+      }
     }
 
     if (answer.isFinal) {
