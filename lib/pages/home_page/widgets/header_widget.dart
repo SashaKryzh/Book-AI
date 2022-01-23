@@ -15,11 +15,19 @@ class HeaderWidget extends StatelessWidget {
           Align(
             alignment: Alignment.center,
             child: Container(
-              height: 120,
-              width: 120,
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(60),
+              margin: EdgeInsets.only(top: 5, bottom: 10),
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: Center(
+                  child: Container(
+                    height: 120,
+                    width: 120,
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(60),
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
@@ -35,7 +43,7 @@ class HeaderWidget extends StatelessWidget {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

@@ -37,7 +37,7 @@ class _Body extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget loading() => Center(
           child: JumpingDotsProgressIndicator(
-            fontSize: 30,
+            fontSize: 40,
             dotSpacing: 2,
             milliseconds: 200,
           ),

@@ -90,11 +90,11 @@ class _SliderMain extends StatelessWidget {
       child: Column(
         children: [
           Flexible(
-            flex: 1,
+            flex: 2,
             child: HeaderWidget(),
           ),
           Expanded(
-            flex: 3,
+            flex: 5,
             child: ChatWidget(),
           ),
         ],

@@ -22,6 +22,11 @@ class ChatWidget extends StatelessWidget {
             onSendPressed: (message) =>
                 context.read<ChatCubit>().sendMessage(message.text),
             scrollPhysics: AlwaysScrollableScrollPhysics(),
+            emptyState: Center(
+              child: Text(
+                'Send Hi to start a conversation',
+              ),
+            ),
             theme: DefaultChatTheme(
               primaryColor: Color(0xFFE46DCA),
             ),
