@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:int20h_app/dto/audio_message.dart';
 import 'package:int20h_app/services/dialogue_service.dart';
 
 part 'chat_cubit.freezed.dart';
@@ -24,18 +25,20 @@ class ChatCubit extends Cubit<ChatState> {
     return super.close();
   }
 
-  late final StreamSubscription<Message> _messagesSubscription;
+  late final StreamSubscription<AudioMessage> _messagesSubscription;
 
   void loadMessages() async {
     final messages = await _dialogueService.getMessages();
-    emit(state.copyWith(messages: [...messages]));
+    // emit(state.copyWith(messages: [...messages]));
+    emit(state.copyWith(messages: []));
   }
 
   Future<void> sendMessage(String message) async {
     _dialogueService.sendMessage(message);
   }
 
-  void _addMessage(Message message) {
-    emit(state.copyWith(messages: [message, ...state.messages]));
+  void _addMessage(AudioMessage message) {
+    // emit(state.copyWith(messages: [message, ...state.messages]));
+    emit(state.copyWith(messages: [...state.messages]));
   }
 }

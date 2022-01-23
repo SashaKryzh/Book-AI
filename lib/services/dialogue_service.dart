@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:injectable/injectable.dart';
 import 'package:int20h_app/constants.dart';
+import 'package:int20h_app/dto/audio_message.dart';
 import 'package:int20h_app/models/book_types.dart';
 import 'package:int20h_app/models/chat_response.dart';
 import 'package:int20h_app/models/dialogue_summary.dart';
-import 'package:int20h_app/models/mood_types.dart';
 import 'package:int20h_app/services/dialogflow_service.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 
@@ -26,21 +26,24 @@ class DialogueService {
   var questionNumber = 0;
 
   final DialogueSummary _summary = DialogueSummary();
-  final List<Message> _messagesList = [];
-  final _messagesStream = StreamController<Message>.broadcast();
+  final List<AudioMessage> _messagesList = [];
+  final _messagesStream = StreamController<AudioMessage>.broadcast();
 
   final DialogFlowService _dialogFlowService;
 
-  Stream<Message> get messagesStream => _messagesStream.stream;
+  Stream<AudioMessage> get messagesStream => _messagesStream.stream;
 
   void sendMessage(String text) async {
-    _addUserMessage(text);
+    _addUserMessage(text, null);
+
+    if (_summary.isFinalReached) return;
 
     if (isQuestioning) {
       var answer = await _dialogFlowService.sendIntent(text);
 
       if (answer.isError) {
-        _addAIMessage(answer.message); // say that didn't get it
+        _addAIMessage(
+            answer.message, answer.audioBase64); // say that didn't get it
         isWaitingForResponse = true;
       } else {
         _processAnswer(answer);
@@ -58,18 +61,23 @@ class DialogueService {
     } else {
       if (_isEnoughDataAboutUser()) {
         var answer = await _dialogFlowService.sendIntent(text);
-        _addAIMessage(answer.message);
+        _addAIMessage(answer.message, answer.audioBase64);
+        if (answer.isFinal) {
+          _summary.isFinalReached = true;
+        }
         return;
       } else {
         isQuestioning = true;
+        var answer = await _dialogFlowService.sendIntent(text);
+        _addAIMessage(answer.message, answer.audioBase64);
       }
     }
     var question = await _dialogFlowService
         .triggerBookIntent(_userQuestionTypes[questionNumber]);
-    _addAIMessage(question.message);
+    _addAIMessage(question.message, question.audioBase64);
   }
 
-  Future<List<Message>> getMessages() async {
+  Future<List<AudioMessage>> getMessages() async {
     return _messagesList;
   }
 
@@ -95,26 +103,26 @@ class DialogueService {
   }
 
   void _addFinalAIMessage() {
-    _addAIMessage("I've collected enough data.");
-    _addAIMessage("You can say 'Finish' to get the result");
-    _addAIMessage('Or continue with the small talk :)');
-    _addMessage(_userWeights.toString(), aiUser);
+    _addAIMessage("I've collected enough data.", null);
+    _addAIMessage("You can say 'Finish' to get the result", null);
+    _addAIMessage('Or continue with the small talk :)', null);
+    _addMessage(_userWeights.toString(), null, aiUser);
   }
 
-  void _addUserMessage(String message) {
-    _addMessage(message, myUser);
+  void _addUserMessage(String message, String? audioMessage) {
+    _addMessage(message, audioMessage, myUser);
   }
 
-  void _addAIMessage(String message) {
-    _addMessage(message, aiUser);
+  void _addAIMessage(String message, String? audioMessage) {
+    _addMessage(message, audioMessage, aiUser);
   }
 
-  void _addMessage(String message, User user) {
-    var object = TextMessage(
-      author: user,
-      id: _messagesList.length.toString(),
-      text: message,
-    );
+  void _addMessage(String message, String? audioMessage, User user) {
+    var object = AudioMessage(
+        id: _messagesList.length.toString(),
+        user: user,
+        text: message,
+        audioBase64: audioMessage);
     _messagesList.add(object);
     _messagesStream.add(object);
   }
