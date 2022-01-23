@@ -4,5 +4,6 @@ part of 'chat_cubit.dart';
 class ChatState with _$ChatState {
   const factory ChatState({
     @Default([]) List<Message> messages,
+    @Default(false) bool isPlaying,
   }) = _State;
 }
