@@ -135,11 +135,11 @@ class DialogueService {
     } else {
       if (_isEnoughDataAboutUser()) {
         var answer = await _dialogFlowService.sendIntent(text);
-        _addAIMessage(answer.message, answer.audioBase64);
         if (answer.isFinal) {
           _makeBookDecision();
           summary.isFinalReached = true;
         }
+        _addAIMessage(answer.message, answer.audioBase64);
 
         return;
       } else {
@@ -221,8 +221,7 @@ class DialogueService {
   }
 
   void _addFinalAIMessage() {
-    _addAIMessage("I've collected enough data.", null);
-    _addAIMessage("You can say 'Finish' to get the result", null);
+    _addAIMessage("Ok. I have right books for you.\n\nWrite 'Finish' to see them.", null);
     _addAIMessage('Or continue with the small talk :)', null);
     _addMessage(_userWeights.toString(), null, aiUser);
   }
