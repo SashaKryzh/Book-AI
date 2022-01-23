@@ -23,6 +23,74 @@ class DialogueService {
     MapEntry(BookType.communicationProblems, 0),
     MapEntry(BookType.workLifeBalance, 0),
   ]);
+  final Map<BookType, Map<BookType, double>> _userAdditions = Map.fromEntries([
+    MapEntry(
+      BookType.procrastination,
+      Map.fromEntries([
+        MapEntry(BookType.procrastination, 1),
+        MapEntry(BookType.selfCare, 0.1),
+        MapEntry(BookType.anxiety, -0.1),
+        MapEntry(BookType.burnout, 0.5),
+        MapEntry(BookType.communicationProblems, 0),
+        MapEntry(BookType.workLifeBalance, 0.3),
+      ]),
+    ),
+    MapEntry(
+      BookType.selfCare,
+      Map.fromEntries([
+        MapEntry(BookType.procrastination, 0.1),
+        MapEntry(BookType.selfCare, 1),
+        MapEntry(BookType.anxiety, 0),
+        MapEntry(BookType.burnout, 0.2),
+        MapEntry(BookType.communicationProblems, 0),
+        MapEntry(BookType.workLifeBalance, 0.1),
+      ]),
+    ),
+    MapEntry(
+      BookType.anxiety,
+      Map.fromEntries([
+        MapEntry(BookType.procrastination, 0),
+        MapEntry(BookType.selfCare, 0),
+        MapEntry(BookType.anxiety, 1),
+        MapEntry(BookType.burnout, 0.2),
+        MapEntry(BookType.communicationProblems, 0.2),
+        MapEntry(BookType.workLifeBalance, 0.5),
+      ]),
+    ),
+    MapEntry(
+      BookType.burnout,
+      Map.fromEntries([
+        MapEntry(BookType.procrastination, 0),
+        MapEntry(BookType.selfCare, 0),
+        MapEntry(BookType.anxiety, 0.1),
+        MapEntry(BookType.burnout, 1),
+        MapEntry(BookType.communicationProblems, 0),
+        MapEntry(BookType.workLifeBalance, 0.6),
+      ]),
+    ),
+    MapEntry(
+      BookType.communicationProblems,
+      Map.fromEntries([
+        MapEntry(BookType.procrastination, 0),
+        MapEntry(BookType.selfCare, 0.2),
+        MapEntry(BookType.anxiety, 0.2),
+        MapEntry(BookType.burnout, 0.1),
+        MapEntry(BookType.communicationProblems, 1),
+        MapEntry(BookType.workLifeBalance, 0),
+      ]),
+    ),
+    MapEntry(
+      BookType.workLifeBalance,
+      Map.fromEntries([
+        MapEntry(BookType.procrastination, 0.1),
+        MapEntry(BookType.selfCare, 0.3),
+        MapEntry(BookType.anxiety, 0.1),
+        MapEntry(BookType.burnout, 0.1),
+        MapEntry(BookType.communicationProblems, 0.2),
+        MapEntry(BookType.workLifeBalance, 1),
+      ]),
+    ),
+  ]);
 
   var questionNumber = 0;
   bool isQuestioning = false;
@@ -115,7 +183,9 @@ class DialogueService {
 
       if (agreeParam == 'true') {
         var type = _userQuestionTypes[questionNumber];
-        _userWeights[type] = (_userWeights[type] ?? 0) + 1;
+        _userAdditions[type]?.entries.forEach((element) {
+          _userWeights[element.key] = (_userWeights[element.key] ?? 0) + element.value;
+        });
       }
 
       isWaitingForResponse = false;
