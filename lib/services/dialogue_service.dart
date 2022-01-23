@@ -13,23 +13,27 @@ import 'package:flutter_chat_types/flutter_chat_types.dart';
 class DialogueService {
   DialogueService(this._dialogFlowService);
 
-  List<BookType> _userQuestionTypes = BookType.values;
-  Map<BookType, double> _userWeights = Map.fromEntries([
+  final List<BookType> _userQuestionTypes = BookType.values;
+  final Map<BookType, double> _userWeights = Map.fromEntries([
     MapEntry(BookType.procrastination, 0),
     MapEntry(BookType.selfCare, 0),
-    // MapEntry(BookType.workLifeBalance, 0),
+    MapEntry(BookType.anxiety, 0),
+    MapEntry(BookType.burnout, 0),
+    MapEntry(BookType.communicationProblems, 0),
+    MapEntry(BookType.workLifeBalance, 0),
   ]);
 
+  var questionNumber = 0;
   bool isQuestioning = false;
   bool isWaitingForResponse = false;
-
-  var questionNumber = 0;
 
   final DialogueSummary _summary = DialogueSummary();
   final List<AudioMessage> _messagesList = [];
   final _messagesStream = StreamController<AudioMessage>.broadcast();
 
   final DialogFlowService _dialogFlowService;
+
+  // methods
 
   Stream<AudioMessage> get messagesStream => _messagesStream.stream;
 
@@ -42,8 +46,8 @@ class DialogueService {
       var answer = await _dialogFlowService.sendIntent(text);
 
       if (answer.isError) {
-        _addAIMessage(
-            answer.message, answer.audioBase64); // say that didn't get it
+        // say that didn't get it
+        _addAIMessage(answer.message, answer.audioBase64);
         isWaitingForResponse = true;
       } else {
         _processAnswer(answer);
@@ -54,6 +58,7 @@ class DialogueService {
           if (questionNumber == _userQuestionTypes.length) {
             isQuestioning = false;
             _addFinalAIMessage();
+
             return;
           }
         }
@@ -65,6 +70,7 @@ class DialogueService {
         if (answer.isFinal) {
           _summary.isFinalReached = true;
         }
+
         return;
       } else {
         isQuestioning = true;
@@ -74,12 +80,25 @@ class DialogueService {
     }
     var question = await _dialogFlowService
         .triggerBookIntent(_userQuestionTypes[questionNumber]);
-    _addAIMessage(question.message, question.audioBase64);
+
+    if (question.isError) {
+      // if we have enums that dialogflow isn't aware of
+      // this block of code could be removed if not needed
+      _addAIMessage('Having some server issues... Sorry', question.audioBase64);
+      await _dialogFlowService.sendIntent(text);
+      questionNumber++;
+      if (_userQuestionTypes.length >= questionNumber)
+        isWaitingForResponse = false;
+    } else {
+      _addAIMessage(question.message, question.audioBase64);
+    }
   }
 
   Future<List<AudioMessage>> getMessages() async {
     return _messagesList;
   }
+
+  // private
 
   void _processAnswer(ChatResponse answer) {
     if (answer.parameters.isNotEmpty) {
@@ -92,6 +111,7 @@ class DialogueService {
 
       isWaitingForResponse = false;
     }
+    _summary.overallSentiment += answer.sentiment;
 
     if (answer.isFinal) {
       _summary.isFinalReached = true;
@@ -119,10 +139,11 @@ class DialogueService {
 
   void _addMessage(String message, String? audioMessage, User user) {
     var object = AudioMessage(
-        id: _messagesList.length.toString(),
-        user: user,
-        text: message,
-        audioBase64: audioMessage);
+      id: _messagesList.length.toString(),
+      user: user,
+      text: message,
+      audioBase64: audioMessage,
+    );
     _messagesList.add(object);
     _messagesStream.add(object);
   }

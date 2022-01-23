@@ -6,11 +6,12 @@ class ChatResponse {
   bool isFinal;
   bool isError;
 
-  ChatResponse(
-      {required this.message,
-      required this.parameters,
-      this.audioBase64,
-      this.sentiment = 0,
-      this.isFinal = false,
-      this.isError = false});
+  ChatResponse({
+    required this.message,
+    required this.parameters,
+    this.audioBase64,
+    this.sentiment = 0,
+    this.isFinal = false,
+    this.isError = false,
+  });
 }

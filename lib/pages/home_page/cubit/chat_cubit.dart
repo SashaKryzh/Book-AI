@@ -29,8 +29,7 @@ class ChatCubit extends Cubit<ChatState> {
 
   void loadMessages() async {
     final messages = await _dialogueService.getMessages();
-    // emit(state.copyWith(messages: [...messages]));
-    emit(state.copyWith(messages: []));
+    emit(state.copyWith(messages: [...messages]));
   }
 
   Future<void> sendMessage(String message) async {
@@ -38,7 +37,6 @@ class ChatCubit extends Cubit<ChatState> {
   }
 
   void _addMessage(AudioMessage message) {
-    // emit(state.copyWith(messages: [message, ...state.messages]));
-    emit(state.copyWith(messages: [...state.messages]));
+    emit(state.copyWith(messages: [message, ...state.messages]));
   }
 }

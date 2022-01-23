@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:int20h_app/constants.dart';
+import 'package:int20h_app/dto/audio_message.dart';
 import 'package:int20h_app/pages/home_page/cubit/chat_cubit.dart';
 
 class ChatWidget extends StatelessWidget {
@@ -18,7 +20,9 @@ class ChatWidget extends StatelessWidget {
         builder: (context, state) {
           return Chat(
             user: myUser,
-            messages: state.messages,
+            messages: state.messages
+                .map((e) => _mapAudioMessageToMessage(e))
+                .toList(),
             onSendPressed: (message) =>
                 context.read<ChatCubit>().sendMessage(message.text),
             scrollPhysics: AlwaysScrollableScrollPhysics(),
@@ -33,6 +37,14 @@ class ChatWidget extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+
+  types.Message _mapAudioMessageToMessage(AudioMessage audioMessage) {
+    return types.TextMessage(
+      id: audioMessage.id,
+      author: audioMessage.user,
+      text: audioMessage.text,
     );
   }
 }

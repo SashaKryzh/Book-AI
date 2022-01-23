@@ -71,11 +71,13 @@ class DialogFlowService {
     }
 
     var audioBase64 = response.outputAudio;
+    var isError = response.queryResult?.action == 'input.unknown';
 
     return ChatResponse(
       message: textResponse,
       parameters: Map.identity(),
       audioBase64: audioBase64,
+      isError: isError,
     );
   }
 }
