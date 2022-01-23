@@ -183,6 +183,7 @@ class DialogueService {
     isWaitingForResponse = false;
 
     summary = DialogueSummary();
+    _messagesList.clear();
   }
 
   // private
