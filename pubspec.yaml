@@ -34,6 +34,7 @@ dependencies:
   url_launcher: ^6.0.18
   rive: ^0.8.1
   books_finder: ^4.2.0
+  soundpool: ^2.2.0
   queue: ^3.1.0+1
 
 dev_dependencies:
@@ -56,6 +57,8 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/sounds/message_sound.wav
+    - assets/sounds/elegant-notification-sound.mp3
     - assets/images/
     - assets/dialog_flow_auth.json
     - assets/ai.riv

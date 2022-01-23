@@ -15,7 +15,7 @@ class DialogueService {
   DialogueService(this._dialogFlowService);
 
   final List<BookType> _userQuestionTypes = BookType.values;
-  final Map<BookType, double> _userWeights = Map.fromEntries([
+  Map<BookType, double> _userWeights = Map.fromEntries([
     MapEntry(BookType.procrastination, 0),
     MapEntry(BookType.selfCare, 0),
     MapEntry(BookType.anxiety, 0),
@@ -96,7 +96,7 @@ class DialogueService {
   bool isQuestioning = false;
   bool isWaitingForResponse = false;
 
-  final DialogueSummary summary = DialogueSummary();
+  DialogueSummary summary = DialogueSummary();
   final List<AudioMessage> _messagesList = [];
   final _messagesStream = StreamController<AudioMessage>.broadcast();
 
@@ -168,6 +168,23 @@ class DialogueService {
     return _messagesList;
   }
 
+  void resetService() {
+    _userWeights = Map.fromEntries([
+      MapEntry(BookType.procrastination, 0),
+      MapEntry(BookType.selfCare, 0),
+      MapEntry(BookType.anxiety, 0),
+      MapEntry(BookType.burnout, 0),
+      MapEntry(BookType.communicationProblems, 0),
+      MapEntry(BookType.workLifeBalance, 0),
+    ]);
+
+    questionNumber = 0;
+    isQuestioning = false;
+    isWaitingForResponse = false;
+
+    summary = DialogueSummary();
+  }
+
   // private
 
   void _makeBookDecision() {
@@ -184,7 +201,8 @@ class DialogueService {
       if (agreeParam == 'true') {
         var type = _userQuestionTypes[questionNumber];
         _userAdditions[type]?.entries.forEach((element) {
-          _userWeights[element.key] = (_userWeights[element.key] ?? 0) + element.value;
+          _userWeights[element.key] =
+              (_userWeights[element.key] ?? 0) + element.value;
         });
       }
 
