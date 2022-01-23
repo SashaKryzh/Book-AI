@@ -17,7 +17,7 @@ class ChatCubit extends Cubit<ChatState> {
     _messagesSubscription = _dialogueService.messagesStream.listen(_addMessage);
   }
 
-  DialogueService _dialogueService;
+  final DialogueService _dialogueService;
 
   final audioService = AudioService();
 
@@ -45,21 +45,20 @@ class ChatCubit extends Cubit<ChatState> {
 
   // TODO: delete
   void _addMessage(AudioMessage message) async {
-    audioService.playMessageSound();
-
-    emit(state.copyWith(bookType: BookType.burnout));
-    return;
+    // emit(state.copyWith(bookType: BookType.burnout));
+    // return;
 
     if (message.finishConversation) {
       final bookType = _dialogueService.summary.bookType!;
       emit(state.copyWith(bookType: bookType));
     } else {
+      if (state.isVolumeOn) audioService.playMessageSound();
       emit(state.copyWith(messages: [message, ...state.messages]));
     }
   }
 
   void restart() {
-    // TODO: reset dialog service;
+    _dialogueService.resetService();
     emit(ChatState());
   }
 }
