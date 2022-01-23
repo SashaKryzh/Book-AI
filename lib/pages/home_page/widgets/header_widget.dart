@@ -51,18 +51,55 @@ class HeaderWidget extends StatelessWidget {
 class _Rive extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Transform.scale(
-      scale: 1.5,
-      child: Stack(children: [
-        RiveAnimation.asset(
-          'assets/ai-2.riv',
-          fit: BoxFit.cover,
+    return Stack(
+      children: [
+        Transform.scale(
+          scale: 1.5,
+          child: Stack(
+            children: [
+              RiveAnimation.asset(
+                'assets/ai-2.riv',
+                fit: BoxFit.cover,
+              ),
+              RiveAnimation.asset(
+                'assets/ai-2.riv',
+                fit: BoxFit.cover,
+              ),
+            ],
+          ),
         ),
-        RiveAnimation.asset(
-          'assets/ai-2.riv',
-          fit: BoxFit.cover,
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Container(
+            margin: EdgeInsets.only(bottom: 10, right: 5),
+            child: _VolumeButton(),
+          ),
         ),
-      ]),
+      ],
+    );
+  }
+}
+
+class _VolumeButton extends StatelessWidget {
+  const _VolumeButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => context.router.push(HistoryRoute()),
+      child: SizedBox(
+        height: 35,
+        width: 35,
+        child: Center(
+          child: Icon(
+            Icons.volume_off_rounded,
+            color: Colors.white,
+            size: 28,
+          ),
+        ),
+      ),
     );
   }
 }

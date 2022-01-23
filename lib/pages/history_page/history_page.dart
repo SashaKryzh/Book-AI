@@ -17,7 +17,7 @@ class HistoryPage extends StatelessWidget {
       create: (_) => getIt<HistoryCubit>()..load(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Reccomendation History'),
+          title: Text('Books for you'),
           elevation: 0,
           foregroundColor: Colors.black,
           backgroundColor: Colors.transparent,
@@ -112,49 +112,52 @@ class _ThemeBooks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget book(Book book) {
-      return GestureDetector(
-        onTap: () => launch(book.url),
-        child: AspectRatio(
-          aspectRatio: 1 / 1.3,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(3),
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 1,
-                      blurRadius: 4,
-                    ),
-                  ],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(3),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 1,
-                          blurRadius: 2,
-                        ),
-                      ],
-                    ),
-                    child: CachedNetworkImage(
-                      imageUrl: book.imageUrl,
-                      fit: BoxFit.cover,
-                      placeholder: (_, __) => Container(
-                        color: Colors.grey[200],
+      return Container(
+        margin: EdgeInsets.only(right: 5),
+        child: GestureDetector(
+          onTap: () => launch(book.url),
+          child: AspectRatio(
+            aspectRatio: 1 / 1.3,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(3),
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 1,
+                        blurRadius: 4,
                       ),
-                      errorWidget: (_, __, ___) => Container(
-                        color: Colors.grey[200],
-                        child: Center(
-                          child: Icon(
-                            Icons.error_outline_rounded,
-                            color: Colors.red,
-                            size: 30,
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(3),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 1,
+                            blurRadius: 2,
+                          ),
+                        ],
+                      ),
+                      child: CachedNetworkImage(
+                        imageUrl: book.imageUrl,
+                        fit: BoxFit.cover,
+                        placeholder: (_, __) => Container(
+                          color: Colors.grey[200],
+                        ),
+                        errorWidget: (_, __, ___) => Container(
+                          color: Colors.grey[200],
+                          child: Center(
+                            child: Icon(
+                              Icons.error_outline_rounded,
+                              color: Colors.red,
+                              size: 30,
+                            ),
                           ),
                         ),
                       ),
@@ -178,15 +181,22 @@ class _ThemeBooks extends StatelessWidget {
             children: [
               Text(
                 themeBooks.title,
-                style: Theme.of(context).textTheme.headline5,
+                style: Theme.of(context).textTheme.headline5!.copyWith(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w400,
+                    ),
               ),
               Text(
                 themeBooks.description,
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                      color: Colors.black87,
+                      fontWeight: FontWeight.w300,
+                    ),
               ),
             ],
           ),
         ),
+        SizedBox(height: 5),
         SizedBox(
           height: 170,
           child: ListView(
