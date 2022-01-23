@@ -4,7 +4,6 @@ part of 'chat_cubit.dart';
 class ChatState with _$ChatState {
   const factory ChatState({
     @Default([]) List<AudioMessage> messages,
-    @Default(false) bool isPlaying,
     @Default(true) bool isVolumeOn,
     BookType? bookType,
   }) = _State;

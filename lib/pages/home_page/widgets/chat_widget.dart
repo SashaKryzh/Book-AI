@@ -19,40 +19,52 @@ class ChatWidget extends StatelessWidget {
         topLeft: Radius.circular(30),
         topRight: Radius.circular(30),
       ),
-      child: BlocBuilder<ChatCubit, ChatState>(
-        builder: (context, state) {
+      child: BlocConsumer<ChatCubit, ChatState>(
+        listener: (context, state) {
           if (state.bookType != null) {
-            return HistoryPagePage(bookType: state.bookType);
+            FocusScope.of(context).unfocus();
           }
-
-          return Chat(
-            user: myUser,
-            messages: state.messages
-                .map((e) => _mapAudioMessageToMessage(e))
-                .toList(),
-            onSendPressed: (message) =>
-                context.read<ChatCubit>().sendMessage(message.text),
-            scrollPhysics: AlwaysScrollableScrollPhysics(),
-            emptyState: Center(
-              child: RichText(
-                text: TextSpan(
-                  style: theme.textTheme.bodyText2,
-                  children: [
-                    TextSpan(text: 'Send '),
-                    TextSpan(
-                      text: 'Hi ',
-                      style: theme.textTheme.bodyText2!.copyWith(
-                        fontWeight: FontWeight.w800,
-                      ),
+        },
+        builder: (context, state) {
+          return Stack(
+            children: [
+              Chat(
+                user: myUser,
+                messages: state.messages
+                    .map((e) => _mapAudioMessageToMessage(e))
+                    .toList(),
+                onSendPressed: (message) =>
+                    context.read<ChatCubit>().sendMessage(message.text),
+                scrollPhysics: AlwaysScrollableScrollPhysics(),
+                emptyState: Center(
+                  child: RichText(
+                    text: TextSpan(
+                      style: theme.textTheme.bodyText2,
+                      children: [
+                        TextSpan(text: 'Send '),
+                        TextSpan(
+                          text: 'Hi ',
+                          style: theme.textTheme.bodyText2!.copyWith(
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        TextSpan(text: 'to start a conversation'),
+                      ],
                     ),
-                    TextSpan(text: 'to start a conversation'),
-                  ],
+                  ),
+                ),
+                theme: DefaultChatTheme(
+                  primaryColor: Color(0xFFE46DCA),
                 ),
               ),
-            ),
-            theme: DefaultChatTheme(
-              primaryColor: Color(0xFFE46DCA),
-            ),
+              AnimatedOpacity(
+                opacity: state.bookType != null ? 1 : 0,
+                duration: Duration(milliseconds: 200),
+                child: state.bookType != null
+                    ? HistoryPagePage(bookType: state.bookType)
+                    : Container(),
+              ),
+            ],
           );
         },
       ),
