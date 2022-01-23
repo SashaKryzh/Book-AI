@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:int20h_app/dto/audio_message.dart';
@@ -36,7 +35,13 @@ class ChatCubit extends Cubit<ChatState> {
     _dialogueService.sendMessage(message);
   }
 
+  void toggleVolume() {
+    emit(state.copyWith(isVolumeOn: !state.isVolumeOn));
+  }
+
   void _addMessage(AudioMessage message) {
+    // TODO: play sound
+    // TODO: check for last message and request books
     emit(state.copyWith(messages: [message, ...state.messages]));
   }
 }

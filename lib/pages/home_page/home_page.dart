@@ -91,7 +91,9 @@ class _SliderMain extends StatelessWidget {
         children: [
           Flexible(
             flex: 2,
-            child: HeaderWidget(),
+            child: HeaderWidget(
+              isOpen: isOpen,
+            ),
           ),
           Expanded(
             flex: 5,

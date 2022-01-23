@@ -1,10 +1,14 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:int20h_app/core/router/app_router.dart';
+import 'package:int20h_app/pages/home_page/cubit/chat_cubit.dart';
 import 'package:rive/rive.dart';
 
 class HeaderWidget extends StatelessWidget {
-  const HeaderWidget({Key? key}) : super(key: key);
+  const HeaderWidget({Key? key, required this.isOpen}) : super(key: key);
+
+  final bool isOpen;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +22,9 @@ class HeaderWidget extends StatelessWidget {
             child: AspectRatio(
               aspectRatio: 1,
               child: Center(
-                child: _Rive(),
+                child: _Rive(
+                  isOpen: isOpen,
+                ),
               ),
             ),
           ),
@@ -49,6 +55,10 @@ class HeaderWidget extends StatelessWidget {
 }
 
 class _Rive extends StatelessWidget {
+  const _Rive({Key? key, required this.isOpen}) : super(key: key);
+
+  final bool isOpen;
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -68,10 +78,14 @@ class _Rive extends StatelessWidget {
             ],
           ),
         ),
-        Align(
+        AnimatedAlign(
+          duration: Duration(milliseconds: 150),
           alignment: Alignment.bottomRight,
           child: Container(
-            margin: EdgeInsets.only(bottom: 10, right: 5),
+            margin: EdgeInsets.only(
+              bottom: FocusScope.of(context).hasFocus ? 5 : 10,
+              right: FocusScope.of(context).hasFocus ? 0 : 5,
+            ),
             child: _VolumeButton(),
           ),
         ),
@@ -87,19 +101,25 @@ class _VolumeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => context.router.push(HistoryRoute()),
-      child: SizedBox(
-        height: 35,
-        width: 35,
-        child: Center(
-          child: Icon(
-            Icons.volume_off_rounded,
-            color: Colors.white,
-            size: 28,
+    return BlocBuilder<ChatCubit, ChatState>(
+      builder: (context, state) {
+        return GestureDetector(
+          onTap: () => context.read<ChatCubit>().toggleVolume(),
+          child: SizedBox(
+            height: 35,
+            width: 35,
+            child: Center(
+              child: Icon(
+                state.isVolumeOn
+                    ? Icons.volume_up_rounded
+                    : Icons.volume_off_rounded,
+                color: Colors.white,
+                size: 28,
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
