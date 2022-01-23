@@ -1,8 +1,6 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:int20h_app/core/router/app_router.dart';
-import 'package:int20h_app/pages/home_page/cubit/chat_cubit.dart';
 import 'package:rive/rive.dart';
 
 class HeaderWidget extends StatelessWidget {
@@ -46,9 +44,12 @@ class HeaderWidget extends StatelessWidget {
 class _Rive extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return RiveAnimation.asset(
-      'assets/ai-2.riv',
-      fit: BoxFit.cover,
+    return Transform.scale(
+      scale: 1.5,
+      child: RiveAnimation.asset(
+        'assets/ai-2.riv',
+        fit: BoxFit.cover,
+      ),
     );
   }
 }

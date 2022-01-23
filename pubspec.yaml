@@ -35,7 +35,6 @@ dependencies:
   rive: ^0.8.1
 
 dev_dependencies:
-
   flutter_test:
     sdk: flutter
 
@@ -49,6 +48,8 @@ dev_dependencies:
   json_serializable: ^6.1.4
   freezed: ^1.1.1
 
+  flutter_launcher_icons: ^0.9.2
+
 flutter:
   uses-material-design: true
 
@@ -57,3 +58,11 @@ flutter:
     - assets/dialog_flow_auth.json
     - assets/ai.riv
     - assets/ai-2.riv
+
+flutter_icons:
+  image_path: assets/logo/AppStore.png
+  ios: true
+  android: true
+  remove_alpha_ios: true
+  adaptive_icon_background: assets/logo/android-background.png
+  adaptive_icon_foreground: assets/logo/android-foreground.png
