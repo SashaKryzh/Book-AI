@@ -25,12 +25,19 @@ class HeaderWidget extends StatelessWidget {
           Align(
             alignment: Alignment.topRight,
             child: Container(
-              margin: EdgeInsets.all(12),
-              child: IconButton(
-                onPressed: () => context.router.push(HistoryRoute()),
-                icon: Icon(
-                  Icons.history,
-                  color: Colors.white,
+              margin: EdgeInsets.only(top: 15, right: 12),
+              child: GestureDetector(
+                onTap: () => context.router.push(HistoryRoute()),
+                child: SizedBox(
+                  height: 35,
+                  width: 35,
+                  child: Center(
+                    child: Icon(
+                      Icons.history,
+                      color: Colors.white,
+                      size: 28,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -46,10 +53,16 @@ class _Rive extends StatelessWidget {
   Widget build(BuildContext context) {
     return Transform.scale(
       scale: 1.5,
-      child: RiveAnimation.asset(
-        'assets/ai-2.riv',
-        fit: BoxFit.cover,
-      ),
+      child: Stack(children: [
+        RiveAnimation.asset(
+          'assets/ai-2.riv',
+          fit: BoxFit.cover,
+        ),
+        RiveAnimation.asset(
+          'assets/ai-2.riv',
+          fit: BoxFit.cover,
+        ),
+      ]),
     );
   }
 }
