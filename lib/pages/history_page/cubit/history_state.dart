@@ -8,5 +8,6 @@ class HistoryState with _$HistoryState {
 
   const factory HistoryState.loaded({
     @Default([]) List<ThemeBooks> themeBooks,
-  }) = _Loaded;
+    @Default(false) bool bookTypeSpecified,
+  }) = HistoryLoaded;
 }

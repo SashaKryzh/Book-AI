@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:int20h_app/models/book_types.dart';
 import 'package:int20h_app/pages/history_page/cubit/history_cubit.dart';
+import 'package:int20h_app/pages/home_page/cubit/chat_cubit.dart';
 import 'package:int20h_app/services/books_service/models/book.dart';
 import 'package:int20h_app/services/books_service/models/theme_books.dart';
 import 'package:progress_indicators/progress_indicators.dart';
@@ -24,15 +24,11 @@ class BookBodyWidget extends StatelessWidget {
           ),
         );
 
-    Widget list(List<ThemeBooks> books) {
-      return _List(themeBooks: books);
-    }
-
     return BlocBuilder<HistoryCubit, HistoryState>(
-      builder: (context, state) => state.when(
-        initial: loading,
-        loading: loading,
-        loaded: list,
+      builder: (context, state) => state.map(
+        initial: (_) => loading(),
+        loading: (_) => loading(),
+        loaded: (_) => _List(),
       ),
     );
   }
@@ -41,10 +37,7 @@ class BookBodyWidget extends StatelessWidget {
 class _List extends StatefulWidget {
   const _List({
     Key? key,
-    required this.themeBooks,
   }) : super(key: key);
-
-  final List<ThemeBooks> themeBooks;
 
   @override
   State<_List> createState() => _ListState();
@@ -68,15 +61,43 @@ class _ListState extends State<_List> {
     return AnimatedOpacity(
       opacity: visible ? 1 : 0,
       duration: Duration(milliseconds: 250),
-      child: ListView.separated(
-        padding: EdgeInsets.only(
-          top: 12,
-          bottom: 50,
-        ),
-        itemCount: widget.themeBooks.length,
-        itemBuilder: (_, index) =>
-            _ThemeBooks(themeBooks: widget.themeBooks[index]),
-        separatorBuilder: (_, __) => SizedBox(height: 20),
+      child: BlocBuilder<HistoryCubit, HistoryState>(
+        builder: (context, s) {
+          final state = s as HistoryLoaded;
+
+          if (state.bookTypeSpecified) {
+            return SingleChildScrollView(
+              padding: EdgeInsets.only(top: 30),
+              child: Column(
+                children: [
+                  _ThemeBooks(themeBooks: state.themeBooks.first),
+                  SizedBox(height: 50),
+                  GestureDetector(
+                    onTap: () => context.read<ChatCubit>().restart(),
+                    child: Text(
+                      'Start again',
+                      style: Theme.of(context).textTheme.headline6!.copyWith(
+                            color: Color(0xFFE46DCA),
+                          ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          return ListView.separated(
+            padding: EdgeInsets.only(
+              top: 12,
+              bottom: 50,
+            ),
+            itemCount: state.themeBooks.length,
+            itemBuilder: (_, index) => _ThemeBooks(
+              themeBooks: state.themeBooks[index],
+            ),
+            separatorBuilder: (_, __) => SizedBox(height: 20),
+          );
+        },
       ),
     );
   }

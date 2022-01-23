@@ -4,6 +4,7 @@ import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:int20h_app/constants.dart';
 import 'package:int20h_app/dto/audio_message.dart';
+import 'package:int20h_app/pages/history_page/history_page.dart';
 import 'package:int20h_app/pages/home_page/cubit/chat_cubit.dart';
 
 class ChatWidget extends StatelessWidget {
@@ -18,6 +19,10 @@ class ChatWidget extends StatelessWidget {
       ),
       child: BlocBuilder<ChatCubit, ChatState>(
         builder: (context, state) {
+          if (state.bookType != null) {
+            return HistoryPagePage(bookType: state.bookType);
+          }
+
           return Chat(
             user: myUser,
             messages: state.messages

@@ -10,15 +10,28 @@ class HistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return HistoryPagePage();
+  }
+}
+
+class HistoryPagePage extends StatelessWidget {
+  const HistoryPagePage({Key? key, this.bookType}) : super(key: key);
+
+  final BookType? bookType;
+
+  @override
+  Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<HistoryCubit>()..load(BookType.values),
+      create: (_) => getIt<HistoryCubit>()..load(bookType),
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('Books for you'),
-          elevation: 0,
-          foregroundColor: Colors.black,
-          backgroundColor: Colors.transparent,
-        ),
+        appBar: bookType != null
+            ? null
+            : AppBar(
+                title: Text('Books for you'),
+                elevation: 0,
+                foregroundColor: Colors.black,
+                backgroundColor: Colors.transparent,
+              ),
         body: BookBodyWidget(),
       ),
     );

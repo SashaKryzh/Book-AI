@@ -14,11 +14,13 @@ class HistoryCubit extends Cubit<HistoryState> {
 
   final BooksService _booksService;
 
-  void load(List<BookType> bookTypes) async {
+  void load(BookType? bookType) async {
+    final type = bookType != null ? [bookType] : BookType.values;
     emit(HistoryState.loading());
-    final themeBooks = await _booksService.getThemes(bookTypes);
-    Future.delayed(Duration(seconds: 1), () async {
-      emit(HistoryState.loaded(themeBooks: [...themeBooks]));
-    });
+    final themeBooks = await _booksService.getThemes(type);
+    emit(HistoryState.loaded(
+      themeBooks: [...themeBooks],
+      bookTypeSpecified: bookType != null,
+    ));
   }
 }
