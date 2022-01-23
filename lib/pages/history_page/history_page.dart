@@ -117,7 +117,7 @@ class _ThemeBooks extends StatelessWidget {
         child: GestureDetector(
           onTap: () => launch(book.url),
           child: AspectRatio(
-            aspectRatio: 1 / 1.3,
+            aspectRatio: 2 / 3,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(3),
               child: Padding(

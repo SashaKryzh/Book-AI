@@ -126,6 +126,7 @@ class DialogueService {
     _addAIMessage("I've collected enough data.", null);
     _addAIMessage("You can say 'Finish' to get the result", null);
     _addAIMessage('Or continue with the small talk :)', null);
+    // TODO: send message like Uint8List
     _addMessage(_userWeights.toString(), null, aiUser);
   }
 
@@ -142,8 +143,8 @@ class DialogueService {
       id: _messagesList.length.toString(),
       user: user,
       text: message,
-      audioBase64: audioMessage,
-      finishConversation: _summary.isFinalReached
+      audioBytes: null,
+      finishConversation: _summary.isFinalReached,
     );
     _messagesList.add(object);
     _messagesStream.add(object);
