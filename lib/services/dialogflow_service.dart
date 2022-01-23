@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:dialog_flowtter/dialog_flowtter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:int20h_app/models/book_types.dart';
@@ -16,14 +14,8 @@ class DialogFlowService {
   }
 
   Future<ChatResponse> sendIntent(
-      String userMessage, bool isQuestionContext) async {
+      String userMessage) async {
     final response = await (await _dialogFlowInstance).detectIntent(
-      queryParams: QueryParameters(
-          contexts: isQuestionContext
-              ? [
-                  Context(name: 'myQuestion', lifespanCount: 1),
-                ]
-              : null),
       queryInput: QueryInput(
         text: TextInput(text: userMessage, languageCode: 'en'),
       ),
@@ -44,7 +36,7 @@ class DialogFlowService {
     var isEnd =
         response.queryResult?.diagnosticInfo?['end_conversation'] ?? false;
 
-    var isError = response.queryResult?.action == 'input.welcome';
+    var isError = response.queryResult?.action == 'input.unknown';
 
     return ChatResponse(
       message: textResponse,
@@ -52,6 +44,28 @@ class DialogFlowService {
       sentiment: sentiment,
       isFinal: isEnd,
       isError: isError,
+    );
+  }
+
+  Future<ChatResponse> triggerBookIntent(BookType bookType) async {
+    final response = await (await _dialogFlowInstance).detectIntent(
+      queryInput: QueryInput(
+        text: TextInput(text: bookType.name, languageCode: 'en'),
+      ),
+    );
+
+    var textResponse = response.text ?? 'Error';
+    if (response.message == null) {
+      return ChatResponse(
+        message: textResponse,
+        parameters: Map.identity(),
+        isError: true,
+      );
+    }
+
+    return ChatResponse(
+      message: textResponse,
+      parameters: Map.identity(),
     );
   }
 }

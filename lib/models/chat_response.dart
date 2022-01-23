@@ -9,7 +9,7 @@ class ChatResponse {
   ChatResponse(
       {required this.message,
       required this.parameters,
-      this.sentiment = 0.5,
+      this.sentiment = 0,
       this.isFinal = false,
       this.isError = false});
 }

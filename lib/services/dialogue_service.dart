@@ -13,17 +13,15 @@ import 'package:flutter_chat_types/flutter_chat_types.dart';
 class DialogueService {
   DialogueService(this._dialogFlowService);
 
+  List<BookType> _userQuestionTypes = BookType.values;
   Map<BookType, double> _userWeights = Map.fromEntries([
-    MapEntry(BookType.burnout, 0),
     MapEntry(BookType.procrastination, 0),
-    MapEntry(BookType.workLifeBalance, 0),
+    MapEntry(BookType.selfCare, 0),
+    // MapEntry(BookType.workLifeBalance, 0),
   ]);
 
-  List<MapEntry<String, BookType>> _userQuestions = List.from([
-    MapEntry("Do you feel like burnout?", BookType.burnout),
-    MapEntry("Do you feel like procrastination?", BookType.procrastination),
-    MapEntry("Do you feel like workLifeBalance?", BookType.workLifeBalance),
-  ]);
+  bool isQuestioning = false;
+  bool isWaitingForResponse = false;
 
   var questionNumber = 0;
 
@@ -38,22 +36,37 @@ class DialogueService {
   void sendMessage(String text) async {
     _addUserMessage(text);
 
-    if (questionNumber == _userQuestions.length || _summary.isFinalReached) {
-      // find result
-      _addFinalAIMessage();
-      return;
-    }
+    if (isQuestioning) {
+      var answer = await _dialogFlowService.sendIntent(text);
 
-    ChatResponse answer = await _dialogFlowService.sendIntent(text, true);
-    if (answer.isError) {
-      _addAIMessage(answer.message);
-      // ask question again
-      _addAIMessage(_userQuestions[questionNumber].key);
+      if (answer.isError) {
+        _addAIMessage(answer.message); // say that didn't get it
+        isWaitingForResponse = true;
+      } else {
+        _processAnswer(answer);
+
+        if (!isWaitingForResponse) {
+          questionNumber++;
+
+          if (questionNumber == _userQuestionTypes.length) {
+            isQuestioning = false;
+            _addFinalAIMessage();
+            return;
+          }
+        }
+      }
     } else {
-      _processAnswer(answer); // update weights here
-      questionNumber++;
-      _addAIMessage(answer.message);
+      if (_isEnoughDataAboutUser()) {
+        var answer = await _dialogFlowService.sendIntent(text);
+        _addAIMessage(answer.message);
+        return;
+      } else {
+        isQuestioning = true;
+      }
     }
+    var question = await _dialogFlowService
+        .triggerBookIntent(_userQuestionTypes[questionNumber]);
+    _addAIMessage(question.message);
   }
 
   Future<List<Message>> getMessages() async {
@@ -62,26 +75,30 @@ class DialogueService {
 
   void _processAnswer(ChatResponse answer) {
     if (answer.parameters.isNotEmpty) {
-      var agreeParam = answer.parameters['agree'] ?? false;
+      var agreeParam = answer.parameters['questionResult'];
 
-      if (agreeParam) {
-        var type = _userQuestions[questionNumber].value;
+      if (agreeParam == 'true') {
+        var type = _userQuestionTypes[questionNumber];
         _userWeights[type] = (_userWeights[type] ?? 0) + 1;
       }
+
+      isWaitingForResponse = false;
     }
 
     if (answer.isFinal) {
       _summary.isFinalReached = true;
     }
-    // _addAIMessage("Your sentiment is " + answer.sentiment.toString());
-
-    // todo get all the data about parameters, mood, sentiment...
   }
 
   bool _isEnoughDataAboutUser() {
-    return _summary.isFinalReached &&
-        _summary.moodType != MoodType.undefined &&
-        _summary.bookType != BookType.undefined;
+    return questionNumber == _userQuestionTypes.length;
+  }
+
+  void _addFinalAIMessage() {
+    _addAIMessage("I've collected enough data.");
+    _addAIMessage("You can say 'Finish' to get the result");
+    _addAIMessage('Or continue with the small talk :)');
+    _addMessage(_userWeights.toString(), aiUser);
   }
 
   void _addUserMessage(String message) {
@@ -90,10 +107,6 @@ class DialogueService {
 
   void _addAIMessage(String message) {
     _addMessage(message, aiUser);
-  }
-
-  void _addFinalAIMessage() {
-    _addMessage("Я собрал достаточно параметров", aiUser);
   }
 
   void _addMessage(String message, User user) {
