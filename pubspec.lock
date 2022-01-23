@@ -50,13 +50,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.8.2"
-  audiofileplayer:
-    dependency: "direct main"
-    description:
-      name: audiofileplayer
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
   auto_route:
     dependency: "direct main"
     description:
@@ -356,13 +349,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.5.4"
-  flutter_ffmpeg:
-    dependency: transitive
-    description:
-      name: flutter_ffmpeg
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.2"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -772,13 +758,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1+1"
-  recase:
-    dependency: transitive
-    description:
-      name: recase
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.0.0"
   retrofit:
     dependency: "direct main"
     description:
@@ -896,27 +875,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.0"
-  tau_platform_interface:
-    dependency: transitive
-    description:
-      name: tau_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "9.0.0-beta-1"
-  tau_sound:
-    dependency: "direct main"
-    description:
-      name: tau_sound
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "9.0.0-beta-1"
-  tau_web:
-    dependency: transitive
-    description:
-      name: tau_web
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "9.0.0-beta-1"
   term_glyph:
     dependency: transitive
     description:

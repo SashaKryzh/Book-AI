@@ -43,9 +43,7 @@ class ChatCubit extends Cubit<ChatState> {
   }
 
   void _addMessage(AudioMessage message) async {
-    if (message.audioBytes != null) {
-      audioService.addInQueue(message.audioBytes!);
-    }
+    audioService.playMessageSound();
     // TODO: check for last message and request books
     emit(state.copyWith(messages: [message, ...state.messages]));
   }
