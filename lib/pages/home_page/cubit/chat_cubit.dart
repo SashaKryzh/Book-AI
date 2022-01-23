@@ -43,7 +43,6 @@ class ChatCubit extends Cubit<ChatState> {
     emit(state.copyWith(isVolumeOn: !state.isVolumeOn));
   }
 
-  // TODO: delete
   void _addMessage(AudioMessage message) async {
     // emit(state.copyWith(bookType: BookType.burnout));
     // return;

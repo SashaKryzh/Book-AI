@@ -7,16 +7,16 @@ import 'package:books_finder/books_finder.dart' as google_books;
 @lazySingleton
 class BooksService {
   final Map<BookType, String> _bookSearchRequests = Map.fromEntries([
-    MapEntry(BookType.procrastination, "Procrastination"),
-    MapEntry(BookType.selfCare, "Self care"),
-    MapEntry(BookType.anxiety, "Anxiety"),
-    MapEntry(BookType.burnout, "Burnout"),
-    MapEntry(BookType.communicationProblems, "Communication Problems"),
-    MapEntry(BookType.workLifeBalance, "Work Life Balance"),
+    MapEntry(BookType.procrastination, 'Procrastination'),
+    MapEntry(BookType.selfCare, 'Self care'),
+    MapEntry(BookType.anxiety, 'Anxiety'),
+    MapEntry(BookType.burnout, 'Burnout'),
+    MapEntry(BookType.communicationProblems, 'Communication Problems'),
+    MapEntry(BookType.workLifeBalance, 'Work Life Balance'),
   ]);
 
   Future<ThemeBooks> getBooksOnTheme(BookType theme) async {
-    final searchTitle = _bookSearchRequests[theme] ?? "Problem Solving";
+    final searchTitle = _bookSearchRequests[theme] ?? 'Problem Solving';
     final books = await google_books.queryBooks(
       searchTitle,
       maxResults: 6,
@@ -28,7 +28,7 @@ class BooksService {
         .map((b) => Book(
               title: b.info.title,
               description: b.info.description,
-              url: "http://books.google.com.ua/books?id=" + b.id,
+              url: 'http://books.google.com.ua/books?id=' + b.id,
               imageUrl: b.info.imageLinks['thumbnail']?.toString() ?? '',
             ))
         .toList();

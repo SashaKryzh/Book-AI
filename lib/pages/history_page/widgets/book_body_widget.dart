@@ -188,13 +188,6 @@ class _ThemeBooks extends StatelessWidget {
                       fontWeight: FontWeight.w400,
                     ),
               ),
-              Text(
-                themeBooks.description,
-                style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                      color: Colors.black87,
-                      fontWeight: FontWeight.w300,
-                    ),
-              ),
             ],
           ),
         ),

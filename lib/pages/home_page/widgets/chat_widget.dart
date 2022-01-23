@@ -12,6 +12,8 @@ class ChatWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return ClipRRect(
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(30),
@@ -32,8 +34,20 @@ class ChatWidget extends StatelessWidget {
                 context.read<ChatCubit>().sendMessage(message.text),
             scrollPhysics: AlwaysScrollableScrollPhysics(),
             emptyState: Center(
-              child: Text(
-                'Send Hi to start a conversation',
+              child: RichText(
+                text: TextSpan(
+                  style: theme.textTheme.bodyText2,
+                  children: [
+                    TextSpan(text: 'Send '),
+                    TextSpan(
+                      text: 'Hi ',
+                      style: theme.textTheme.bodyText2!.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    TextSpan(text: 'to start a conversation'),
+                  ],
+                ),
               ),
             ),
             theme: DefaultChatTheme(

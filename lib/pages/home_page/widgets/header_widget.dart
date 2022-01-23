@@ -48,6 +48,16 @@ class HeaderWidget extends StatelessWidget {
               ),
             ),
           ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Container(
+              margin: EdgeInsets.only(
+                bottom: 10,
+                right: 14,
+              ),
+              child: _VolumeButton(),
+            ),
+          ),
         ],
       ),
     );
@@ -76,17 +86,6 @@ class _Rive extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ],
-          ),
-        ),
-        AnimatedAlign(
-          duration: Duration(milliseconds: 150),
-          alignment: Alignment.bottomRight,
-          child: Container(
-            margin: EdgeInsets.only(
-              bottom: FocusScope.of(context).hasFocus ? 5 : 10,
-              right: FocusScope.of(context).hasFocus ? 0 : 5,
-            ),
-            child: _VolumeButton(),
           ),
         ),
       ],
