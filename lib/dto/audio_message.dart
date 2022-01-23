@@ -5,10 +5,13 @@ class AudioMessage {
   User user;
   String text;
   String? audioBase64;
+  bool finishConversation;
 
-  AudioMessage(
-      {required this.id,
-      required this.user,
-      required this.text,
-      this.audioBase64});
+  AudioMessage({
+    required this.id,
+    required this.user,
+    required this.text,
+    this.audioBase64,
+    this.finishConversation = false
+  });
 }

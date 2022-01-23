@@ -143,6 +143,7 @@ class DialogueService {
       user: user,
       text: message,
       audioBase64: audioMessage,
+      finishConversation: _summary.isFinalReached
     );
     _messagesList.add(object);
     _messagesStream.add(object);

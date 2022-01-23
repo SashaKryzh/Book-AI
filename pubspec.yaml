@@ -33,6 +33,7 @@ dependencies:
   progress_indicators: ^1.0.0
   url_launcher: ^6.0.18
   rive: ^0.8.1
+  books_finder: ^4.2.0
 
 dev_dependencies:
   flutter_test:
