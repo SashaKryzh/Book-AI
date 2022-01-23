@@ -18,7 +18,7 @@ class BooksService {
   Future<ThemeBooks> getBooksOnTheme(BookType theme) async {
     final searchTitle = _bookSearchRequests[theme] ?? "Problem Solving";
     final books = await google_books.queryBooks(
-    searchTitle,
+      searchTitle,
       maxResults: 6,
       printType: google_books.PrintType.books,
       orderBy: google_books.OrderBy.relevance,
@@ -40,14 +40,9 @@ class BooksService {
     );
   }
 
-  Future<List<ThemeBooks>> getThemes() async {
-    return [
-      await getBooksOnTheme(BookType.procrastination),
-      await getBooksOnTheme(BookType.selfCare),
-      await getBooksOnTheme(BookType.anxiety),
-      await getBooksOnTheme(BookType.burnout),
-      await getBooksOnTheme(BookType.communicationProblems),
-      await getBooksOnTheme(BookType.workLifeBalance),
-    ];
+  Future<List<ThemeBooks>> getThemes(List<BookType> bookTypes) async {
+    return Stream.fromIterable(bookTypes)
+        .asyncMap((event) => getBooksOnTheme(event))
+        .toList();
   }
 }

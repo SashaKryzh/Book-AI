@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import 'package:int20h_app/core/injection/injection.dart';
 import 'package:int20h_app/pages/home_page/cubit/chat_cubit.dart';
+import 'package:int20h_app/pages/home_page/widgets/book_popup_widget.dart';
 import 'package:int20h_app/pages/home_page/widgets/chat_widget.dart';
 import 'package:int20h_app/pages/home_page/widgets/header_widget.dart';
 import 'package:int20h_app/pages/home_page/widgets/menu_button.dart';
@@ -97,7 +98,12 @@ class _SliderMain extends StatelessWidget {
           ),
           Expanded(
             flex: 5,
-            child: ChatWidget(),
+            child: Stack(
+              children: [
+                ChatWidget(),
+                BookPopupWidget(),
+              ],
+            )
           ),
         ],
       ),
