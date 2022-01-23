@@ -27,7 +27,7 @@ class DialogueService {
   bool isQuestioning = false;
   bool isWaitingForResponse = false;
 
-  final DialogueSummary _summary = DialogueSummary();
+  final DialogueSummary summary = DialogueSummary();
   final List<AudioMessage> _messagesList = [];
   final _messagesStream = StreamController<AudioMessage>.broadcast();
 
@@ -40,7 +40,7 @@ class DialogueService {
   void sendMessage(String text) async {
     _addUserMessage(text, null);
 
-    if (_summary.isFinalReached) return;
+    if (summary.isFinalReached) return;
 
     if (isQuestioning) {
       var answer = await _dialogFlowService.sendIntent(text);
@@ -68,7 +68,8 @@ class DialogueService {
         var answer = await _dialogFlowService.sendIntent(text);
         _addAIMessage(answer.message, answer.audioBase64);
         if (answer.isFinal) {
-          _summary.isFinalReached = true;
+          _makeBookDecision();
+          summary.isFinalReached = true;
         }
 
         return;
@@ -100,6 +101,13 @@ class DialogueService {
 
   // private
 
+  void _makeBookDecision() {
+    summary.bookType = _userWeights.entries
+        .reduce((currentUser, nextUser) =>
+            currentUser.value > nextUser.value ? currentUser : nextUser)
+        .key;
+  }
+
   void _processAnswer(ChatResponse answer) {
     if (answer.parameters.isNotEmpty) {
       var agreeParam = answer.parameters['questionResult'];
@@ -111,10 +119,10 @@ class DialogueService {
 
       isWaitingForResponse = false;
     }
-    _summary.overallSentiment += answer.sentiment;
+    summary.overallSentiment += answer.sentiment;
 
     if (answer.isFinal) {
-      _summary.isFinalReached = true;
+      summary.isFinalReached = true;
     }
   }
 
@@ -144,7 +152,7 @@ class DialogueService {
       user: user,
       text: message,
       audioBytes: null,
-      finishConversation: _summary.isFinalReached,
+      finishConversation: summary.isFinalReached,
     );
     _messagesList.add(object);
     _messagesStream.add(object);
