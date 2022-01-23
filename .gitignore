@@ -55,3 +55,4 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /assets/dialog_flow_auth.json
+/android/app/google-services.json

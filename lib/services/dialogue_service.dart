@@ -223,7 +223,6 @@ class DialogueService {
   void _addFinalAIMessage() {
     _addAIMessage("Ok. I have right books for you.\n\nWrite 'Finish' to see them.", null);
     _addAIMessage('Or continue with the small talk :)', null);
-    _addMessage(_userWeights.toString(), null, aiUser);
   }
 
   void _addUserMessage(String message, Uint8List? audioMessage) {
