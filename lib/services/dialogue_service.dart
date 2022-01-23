@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:injectable/injectable.dart';
 import 'package:int20h_app/constants.dart';
@@ -134,24 +135,23 @@ class DialogueService {
     _addAIMessage("I've collected enough data.", null);
     _addAIMessage("You can say 'Finish' to get the result", null);
     _addAIMessage('Or continue with the small talk :)', null);
-    // TODO: send message like Uint8List
     _addMessage(_userWeights.toString(), null, aiUser);
   }
 
-  void _addUserMessage(String message, String? audioMessage) {
+  void _addUserMessage(String message, Uint8List? audioMessage) {
     _addMessage(message, audioMessage, myUser);
   }
 
-  void _addAIMessage(String message, String? audioMessage) {
+  void _addAIMessage(String message, Uint8List? audioMessage) {
     _addMessage(message, audioMessage, aiUser);
   }
 
-  void _addMessage(String message, String? audioMessage, User user) {
+  void _addMessage(String message, Uint8List? audioMessage, User user) {
     var object = AudioMessage(
       id: _messagesList.length.toString(),
       user: user,
       text: message,
-      audioBytes: null,
+      audioBytes: audioMessage,
       finishConversation: summary.isFinalReached,
     );
     _messagesList.add(object);

@@ -1,6 +1,8 @@
+import 'dart:typed_data';
+
 class ChatResponse {
   String message;
-  String? audioBase64;
+  Uint8List? audioBase64;
   Map<String, dynamic> parameters;
   double sentiment;
   bool isFinal;

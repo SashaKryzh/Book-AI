@@ -40,13 +40,13 @@ class DialogFlowService {
         response.queryResult?.diagnosticInfo?['end_conversation'] ?? false;
 
     var isError = response.queryResult?.action == 'input.unknown';
-    var audioBase64 = response.outputAudio;
+    var audioBytes = response.outputAudioBytes;
 
     return ChatResponse(
       message: textResponse,
       parameters: parameters,
       sentiment: sentiment,
-      audioBase64: audioBase64,
+      audioBase64: audioBytes,
       isFinal: isEnd,
       isError: isError,
     );
@@ -70,13 +70,13 @@ class DialogFlowService {
       );
     }
 
-    var audioBase64 = response.outputAudio;
+    var audioBytes = response.outputAudioBytes;
     var isError = response.queryResult?.action == 'input.unknown';
 
     return ChatResponse(
       message: textResponse,
       parameters: Map.identity(),
-      audioBase64: audioBase64,
+      audioBase64: audioBytes,
       isError: isError,
     );
   }
